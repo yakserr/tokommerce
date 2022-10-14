@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    return view('layouts/dashboard-test');
+    return view('admin.dashboard');
 });
 
 Route::get('/dashboard', function () {
