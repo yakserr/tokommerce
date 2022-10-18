@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\AddressController;
+use App\Http\Controllers\Seller\ProductController;
+use App\Http\Controllers\Seller\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +17,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+require __DIR__ . '/auth.php';
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function () {
-    return view('admin.dashboard');
+Route::group(['middleware' => ['auth', 'verified']], function () {
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // Prefix User
+    Route::prefix('user/settings')->name('setting.')->group(function () {
+
+        Route::resource('/', UserController::class);
+        Route::resource('/address', AddressController::class);
+    });
+
+    // prefix seller
+    Route::group(['prefix' => 'seller'], function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('seller.dashboard');
+        Route::resource('/products', ProductController::class);
+    });
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-require __DIR__ . '/auth.php';

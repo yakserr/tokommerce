@@ -1,10 +1,14 @@
-<div id="navbar_parent" class="navbar fixed flex justify-between w-4/5 bg-light-white rounded-md m-2">
+<div id="navbar_parent" class="navbar fixed flex justify-between w-4/5 bg-primary rounded-md m-2 z-50">
+
+    <!-- BEGIN: Breadcrumbs -->
     <div class="text-sm breadcrumbs">
         <ul>
+            <li class="text-white"><a>Home</a></li>
             <li class="text-white"><a>Dashboard</a></li>
-            <li class="text-white"><a>Documents</a></li>
         </ul>
     </div>
+    <!-- END: Breadcrumbs -->
+
     <div class="flex-none">
         <div class="dropdown dropdown-end">
             <label tabindex="0" class="btn btn-ghost btn-circle">
@@ -42,7 +46,16 @@
                     </a>
                 </li>
                 <li><a>Settings</a></li>
-                <li><a>Logout</a></li>
+
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a onclick="event.preventDefault();
+                        this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </a>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
