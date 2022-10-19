@@ -1,0 +1,47 @@
+@startuml
+
+' hide the spot
+hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity users {
+    *id : uint <<PK>>
+    --
+    *name : string
+    *email : string
+    birthday : date
+    gender : enum['male','female','other']
+    *email_verified_at : timestamp
+    *password : string
+    photo : string
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity addresses {
+    *id : uint ai <<PK>>
+    --
+    *label_address : string
+    *province_id : uint
+    *regencies_id : uint
+    *cities_id : uint
+    *districts_id : uint
+    *zip_code : string
+    *address : string
+    *notes : string
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+entity user_addresses {
+    *id : uint ai <<PK>>
+    --
+    *user_id : uint <<FK>>
+    *address_id : uint <<FK>>
+    *created_at : timestamp
+    *updated_at : timestamp
+}
+
+@enduml
