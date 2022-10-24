@@ -74,10 +74,10 @@
                     </span>
                 </li>
             </a>
-            <a href="{{ route('setting.index') }}">
+            <a href="{{ route('user.settings.index') }}">
                 <li
                     class="text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md mt-2
-                @if (request()->routeIs('setting.index') || request()->routeIs('setting.address.index')) ? bg-light-white : '' @endif">
+                @if (request()->routeIs('user.settings.index') || request()->routeIs('user.address.index')) ? bg-light-white : '' @endif">
                     <span class="text-2xl block float-left">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">

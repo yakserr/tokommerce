@@ -13,9 +13,9 @@
         <div class="bg-base-300 my-8 mx-2 py-2 px-4 min-h-screen rounded-2xl">
             <!-- BEGIN: Top Menu-->
             <div class="flex justify-center gap-4 pb-2 border-b-2 border-teal-300 border-spacing-8">
-                <a href="{{ route('setting.index') }}">
+                <a href="{{ route('user.settings.index') }}">
                     <div class="text-gray-300 text-sm flex items-center gap-x-2 cursor-pointer p-2 hover:bg-light-white rounded-md mt-2
-                    @if (request()->routeIs('setting.index')) ? bg-light-white : '' @endif">
+                    @if (request()->routeIs('user.settings.index')) ? bg-light-white : '' @endif">
                         <span class="text-2xl block float-left">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6">
@@ -29,9 +29,9 @@
                         </span>
                     </div>
                 </a>
-                <a href="{{ route('setting.address.index') }}">
+                <a href="{{ route('user.address.index') }}">
                     <div class="text-gray-300 text-sm flex items-center gap-x-2 cursor-pointer p-2 hover:bg-light-white rounded-md mt-2
-                    @if (request()->routeIs('setting.address.index')) ? bg-light-white : '' @endif">
+                    @if (request()->routeIs('user.address.index')) ? bg-light-white : '' @endif">
                         <span class="text-2xl block float-left">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6">
@@ -91,8 +91,17 @@
                                 <label class="flex items-center">
                                     <span class="text-sm font-medium whitespace-nowrap w-48">Name</span>
                                     <p class="mt-1 block w-full">
-                                        {{ Auth::user()->name }}
+                                        <span>
+                                            {{ Auth::user()->name }}
+                                        </span>
+
+                                        <!-- The button to open Setting modal -->
+                                        <label for="setting-modal" onclick="settingModal('name')"
+                                            class="btn btn-xs btn-outline btn-accent modal-button ml-2">
+                                            Change
+                                        </label>
                                     </p>
+
                                 </label>
                             </div>
                             <div class="col-span-2">
@@ -100,7 +109,13 @@
                                     <span class=" text-sm font-medium whitespace-nowrap w-48">Date of
                                         Birth</span>
                                     <p class="mt-1 block w-full">
-                                        17 September 2007
+                                        {{ Carbon\Carbon::parse(Auth::user()->birthday)->format('F j, Y') }}
+
+                                        <!-- The button to open Setting modal -->
+                                        <label for="setting-modal" onclick="settingModal('birthday')"
+                                            class="btn btn-xs btn-outline btn-accent modal-button ml-2">
+                                            Change
+                                        </label>
                                     </p>
                                 </label>
                             </div>
@@ -108,7 +123,13 @@
                                 <label class="flex items-center">
                                     <span class="text-sm font-medium whitespace-nowrap w-48">Gender</span>
                                     <p class="mt-1 block w-full">
-                                        Male
+                                        {{ Auth::user()->gender ?? "Not Set" }}
+
+                                        <!-- The button to open Setting modal -->
+                                        <label for="setting-modal" onclick="settingModal('gender')"
+                                            class="btn btn-xs btn-outline btn-accent modal-button ml-2">
+                                            Change
+                                        </label>
                                     </p>
                                 </label>
                             </div>
@@ -120,6 +141,12 @@
                                     <span class="text-sm font-medium whitespace-nowrap w-48">Email</span>
                                     <p class="mt-1 block w-full">
                                         {{ Auth::user()->email }}
+
+                                        <!-- The button to open Setting modal -->
+                                        <label for="setting-modal" onclick="settingModal('email')"
+                                            class="btn btn-xs btn-outline btn-accent modal-button ml-2">
+                                            Change
+                                        </label>
                                     </p>
                                 </label>
                             </div>
@@ -129,7 +156,13 @@
                                         Phone Number
                                     </span>
                                     <p class="mt-1 block w-full">
-                                        923476-8866
+                                        {{ Auth::user()->phone ?? "Not Set" }}
+
+                                        <!-- The button to open Setting modal -->
+                                        <label for="setting-modal" onclick="settingModal('phone')"
+                                            class="btn btn-xs btn-outline btn-accent modal-button ml-2">
+                                            Change
+                                        </label>
                                     </p>
                                 </label>
                             </div>
@@ -142,4 +175,145 @@
         </div>
 
     </div>
-    @endsection
+</div>
+
+<!-- BEGIN: Setting Modal -->
+<input type="checkbox" id="setting-modal" class="modal-toggle" />
+<label for="setting-modal" class="modal cursor-pointer">
+    <label class="modal-box relative" for="">
+        <label for="setting-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <h3 id='title-modal' class="text-lg font-bold text-center mb-3">{title}</h3>
+        <p id="desc-modal" class="text-center text-lg font-medium mb-6"></p>
+        <form action="{{ route('user.settings.update', Auth::user()->id) }}" method="POST">
+            @method('PUT')
+            @csrf
+            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+            <div id='elm'>
+            </div>
+            <div class="modal-action">
+                <button type="submit" id="submit-modal" name="update" class="btn">
+                    Update
+                </button>
+            </div>
+        </form>
+    </label>
+</label>
+<!-- END: Setting Modal -->
+@endsection
+
+{{-- ? Rewrite if there is better way --}}
+@push('setting-modal')
+<script>
+    function settingModal(param) {
+            const title = document.getElementById('title-modal');
+            const elm = document.getElementById('elm');
+            const input = document.createElement('input');
+            const desc = document.getElementById('desc-modal');
+            const submit = document.getElementById('submit-modal');
+
+
+            // change the title of modal
+            if(param == '') {
+                title.innerHTML = 'Change Title';
+                desc.innerHTML = 'No Description';
+                document.createElement('p').innerHTML = 'No Content';
+            } else if(param == 'name') {
+                title.innerHTML = 'Change Name';
+                desc.innerHTML = 'Please enter your new name';
+                // create element input
+                elm.removeChild(elm.childNodes[0]);
+                input.setAttribute('type', 'text');
+                input.setAttribute('name', 'name');
+                input.setAttribute('id', 'name');
+                input.setAttribute('placeholder', 'New Name');
+                input.setAttribute('class', 'input input-bordered input-primary w-full');
+                input.required = true;
+                elm.appendChild(input);
+
+                // change the value of button submit
+                submit.setAttribute('value', 'update_name');
+
+
+            } else if(param == 'birthday') {
+                title.innerHTML = 'Change Birthday';
+                desc.innerHTML = 'Please enter your new birthday';
+                // create element input
+                elm.removeChild(elm.childNodes[0]);
+                input.setAttribute('type', 'date');
+                input.setAttribute('name', 'birthday');
+                input.setAttribute('id', 'birthday');
+                input.setAttribute('class', 'input input-bordered input-primary w-full');
+                input.required = true;
+                elm.appendChild(input);
+
+                // change the value of button submit
+                submit.setAttribute('value', 'update_birthday');
+            } else if(param == 'gender') {
+                title.innerHTML = 'Change Gender';
+                desc.innerHTML = "Please select"
+                // create element select
+                elm.removeChild(elm.childNodes[0]);
+                const select = document.createElement('select');
+                const option1 = document.createElement('option');
+                const option2 = document.createElement('option');
+                const option3 = document.createElement('option');
+
+                select.setAttribute('class', 'select select-primary w-full');
+
+                // attributes of select
+                select.setAttribute('name', 'gender');
+
+
+                // value of option
+                option1.value = 'male';
+                option1.text = "male";
+                option2.value = "female";
+                option2.text = "female";
+                option3.value = "other";
+                option3.text = "other";
+
+                // insert option to select
+                select.add(option1);
+                select.add(option2);
+                select.add(option3);
+
+                select.required = true;
+                elm.appendChild(select);
+
+                // change the value of button submit
+                submit.setAttribute('value', 'update_gender');
+            } else if(param == 'email') {
+                title.innerHTML = 'Change Email';
+                desc.innerHTML = 'Please enter your new email';
+                // create element input
+                elm.removeChild(elm.childNodes[0]);
+                input.setAttribute('type', 'email');
+                input.setAttribute('name', 'email');
+                input.setAttribute('id', 'email');
+                input.setAttribute('placeholder', 'yourmail@gmail.com');
+                input.setAttribute('class', 'input input-bordered input-primary w-full');
+                input.required = true;
+                elm.appendChild(input);
+
+                // change the value of button submit
+                submit.setAttribute('value', 'update_email');
+            } else if(param == 'phone') {
+                title.innerHTML = 'Change Phone Number';
+                desc.innerHTML = 'Please enter your new phone number';
+                // create element input
+                elm.removeChild(elm.childNodes[0]);
+                input.setAttribute('type', 'number');
+                input.setAttribute('name', 'phone');
+                input.setAttribute('id', 'phone');
+                input.setAttribute('placeholder', '087xxxxxxxxx');
+                input.setAttribute('class', 'input input-bordered input-primary w-full');
+                input.required = true;
+                elm.appendChild(input);
+
+                // change the value of button submit
+                submit.setAttribute('value', 'update_phone');
+            }
+
+        }
+</script>
+@endpush

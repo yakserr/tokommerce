@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\RegionController;
 use App\Http\Controllers\User\AddressController;
 use App\Http\Controllers\Seller\ProductController;
 use App\Http\Controllers\Seller\DashboardController;
@@ -29,16 +30,25 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Prefix User
-    Route::prefix('user/settings')->name('setting.')->group(function () {
+    // Prefix and as setting
 
-        Route::resource('/', UserController::class);
-        Route::resource('/address', AddressController::class);
+    Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+        Route::resource('settings', UserController::class)->only('index', 'update');
+
+        Route::group(['prefix' => 'settings'], function () {
+            Route::resource('address', AddressController::class);
+        });
     });
 
     // prefix seller
     Route::group(['prefix' => 'seller'], function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('seller.dashboard');
-        Route::resource('/products', ProductController::class);
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('seller.dashboard');
+        Route::resource('products', ProductController::class);
     });
+
+    // region
+    Route::get('provinces', [RegionController::class, 'provinces'])->name('provinces');
+    Route::get('cities', [RegionController::class, 'cities'])->name('cities');
+    Route::get('districts', [RegionController::class, 'districts'])->name('districts');
+    Route::get('villages', [RegionController::class, 'villages'])->name('villages');
 });

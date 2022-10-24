@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\User\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -67,9 +70,41 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        if ($request->has('name')) {
+
+            $user->name = $request->name;
+            $user->save();
+        } elseif ($request->has('birthday')) {
+
+            $user->birthday = $request->birthday;
+            $user->save();
+        } elseif ($request->has('gender')) {
+
+            $user->gender = $request->gender;
+            $user->save();
+        } elseif ($request->has('email')) {
+
+            $user->email = $request->email;
+            $user->save();
+        } elseif ($request->has('password')) {
+
+            $user->password = Hash::make($request->password);
+            $user->save();
+        } elseif ($request->has('phone')) {
+
+            $user->phone = $request->phone;
+            $user->save();
+        }
+
+        return redirect()->back()->withInput()->with('success', 'User updated successfully');
     }
 
     /**
