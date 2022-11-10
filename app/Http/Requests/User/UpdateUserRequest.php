@@ -26,32 +26,26 @@ class UpdateUserRequest extends FormRequest
     {
         if (request()->update == 'update_name') {
             return [
-                'user_id' => 'required|integer',
                 'name' => 'required|string|max:255',
             ];
         } elseif (request()->update == 'update_birthday') {
             return [
-                'user_id' => 'required|integer',
                 'birthday' => 'required|date',
             ];
         } elseif (request()->update == 'update_gender') {
             return [
-                'user_id' => 'required|integer',
                 'gender' => 'required',
             ];
         } elseif (request()->update == 'update_email') {
             return [
-                'user_id' => 'required|integer',
                 'email' => 'required|string|email|max:255|unique:users',
             ];
         } elseif (request()->update == 'update_password') {
             return [
-                'user_id' => 'required|integer',
                 'password' => 'required|string|min:8|confirmed',
             ];
         } else if (request()->update == 'update_phone') {
             return [
-                'user_id' => 'required|integer',
                 'phone' => 'required|max:15'
             ];
         }

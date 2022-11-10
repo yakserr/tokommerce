@@ -17,6 +17,14 @@ module.exports = {
                 "dark-purple": "#081A51",
                 "light-white": "rgba(255,255,255,0.18)",
             },
+            fontSize: {
+                xxs: [
+                    "0.5rem",
+                    {
+                        lineHeight: "0.75rem",
+                    },
+                ],
+            },
         },
     },
 

@@ -31,11 +31,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     })->name('dashboard');
 
     // Prefix and as setting
-
     Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
         Route::resource('settings', UserController::class)->only('index', 'update');
 
         Route::group(['prefix' => 'settings'], function () {
+            Route::put('defaultAddress/{address}', [AddressController::class, 'isDefault'])->name('address.isDefault');
             Route::resource('address', AddressController::class);
         });
     });

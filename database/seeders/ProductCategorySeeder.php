@@ -19,32 +19,33 @@ class ProductCategorySeeder extends Seeder
         ProductCategory::create(
             [
                 'name' => 'Apps & Games',
-                'slug' => Str::slug($this->name),
+                // generate slug from name
+                'slug' => Str::slug('Apps & Games'),
                 'description' => 'lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
             ],
             [
                 'name' => 'Electronic',
-                'slug' => Str::slug($this->name),
+                'slug' => Str::slug('Electronic'),
                 'description' => 'lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
             ],
             [
                 'name' => 'Fashion',
-                'slug' => Str::slug($this->name),
+                'slug' => Str::slug('Fashion'),
                 'description' => 'lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
             ],
             [
                 'name' => 'Health Care',
-                'slug' => Str::slug($this->name),
+                'slug' => Str::slug('Health Care'),
                 'description' => 'lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
             ],
             [
                 'name' => 'Food & Drink',
-                'slug' => Str::slug($this->name),
+                'slug' => Str::slug('Food & Drink'),
                 'description' => 'lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
             ],
             [
                 'name' => 'Sports',
-                'slug' => Str::slug($this->name),
+                'slug' => Str::slug('Sports'),
                 'description' => 'lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quod.',
             ]
         );

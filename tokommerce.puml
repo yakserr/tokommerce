@@ -35,13 +35,4 @@ entity addresses {
     *updated_at : timestamp
 }
 
-entity user_addresses {
-    *id : uint ai <<PK>>
-    --
-    *user_id : uint <<FK>>
-    *address_id : uint <<FK>>
-    *created_at : timestamp
-    *updated_at : timestamp
-}
-
 @enduml

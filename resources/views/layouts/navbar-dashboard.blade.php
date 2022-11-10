@@ -1,7 +1,7 @@
 <div id="navbar_parent" class="navbar fixed flex justify-between w-4/5 bg-primary rounded-md m-2 z-50">
 
     <!-- BEGIN: Breadcrumbs -->
-    <div class="text-sm breadcrumbs">
+    <div class="text-xs breadcrumbs">
         <ul>
             <li class="text-white"><a>Home</a></li>
             <li class="text-white"><a>Dashboard</a></li>
@@ -63,6 +63,37 @@
 
 @push('navbar-script')
 <script>
+    function toggleSideBar() {
+        parent_sidebar = document.getElementById('parent-sidebar');
+        sidebar_icon = document.getElementById('sidebar-icon');
+        logo_title = document.getElementById('logo-title');
+        input_sidebar = document.getElementById('input-sidebar');
+        search_sidebar = document.getElementById('search-sidebar');
+        menu_title = document.querySelectorAll('.menu-title');
+        navbar_parent = document.getElementById('navbar_parent');
 
+        sidebar_icon.classList.toggle('rotate-180');
+        logo_title.classList.toggle('hidden');
+        input_sidebar.classList.toggle('hidden');
+
+
+        menu_title.forEach(el => {
+            el.classList.toggle('hidden');
+        })
+
+        if (parent_sidebar.classList.contains('w-72')) {
+            // from open to close
+            parent_sidebar.classList.remove('w-72');
+            parent_sidebar.classList.add('w-20');
+            navbar_parent.classList.remove('w-4/5');
+            navbar_parent.classList.add('w-11/12');
+        } else {
+            // from close to open
+            parent_sidebar.classList.remove('w-20');
+            parent_sidebar.classList.add('w-72');
+            navbar_parent.classList.remove('w-11/12');
+            navbar_parent.classList.add('w-4/5');
+        }
+    }
 </script>
 @endpush
